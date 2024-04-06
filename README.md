@@ -1,6 +1,7 @@
 ## Part A: Threads & Processes
 
-![[ThreadsProcess.png]]
+![Threads & Processes](https://raw.githubusercontent.com/ldt9/Database-Webplatform-in-Go/main/ThreadsProcess.png)
+
 The diagram in `ThreadsProcess.puml` represents the process of creating and returning threads to the worker pool in the context of handling HTTP requests. The code that corresponds to this process is primarily located in the `server.go` file.
 
 **Opening a Database Connection**: The main function opens a connection to the database. This is represented in the diagram by the interaction between "Main" and "Database".
@@ -109,7 +110,8 @@ When an HTTP request is received, the server delegates the request to the `Worke
 Finally, the `main` function waits for the context to be canceled and then shuts down the server gracefully.
 ### Part B: Memory Layout
 
-![[MemoryLayout-Server_Memory_Layout.png]]
+![MemoryLayout-Server_Memory_Layout.png](https://raw.githubusercontent.com/ldt9/Database-Webplatform-in-Go/main/MemoryLayout-Server_Memory_Layout.png)
+
 In the [Go memory model](https://go.dev/ref/mem) describes how Go programs read from and write to shared memory. It is a specification that defines the behavior of concurrent Go programs, and it is crucial for understanding how to write correct concurrent code in Go. In Go, concurrency is achieved through goroutines, which are lightweight threads managed by the Go runtime. Each goroutine has its own stack, which is used for storing local variables, function parameters, and return addresses.
 
 The Stack is used for storing local variables, function parameters, and return addresses. Each goroutine in Go has its own stack, which grows and shrinks as needed. The stack is very efficient for storing and retrieving data because it follows the Last-In-First-Out (LIFO) principle. However, the data stored in the stack is only available within its own scope, which means the data is not accessible outside the function it's declared in. Once the function execution is completed, all the variables in the stack will be wiped out.
@@ -137,7 +139,7 @@ The Static/Global region is used for storing global variables and static data. T
 The Code region is used for storing the binary code of the program. This includes the compiled instructions of the program and the imported packages. The code is read-only and is loaded into memory when the program starts. In the provided `server.go` code, the main package and the imported packages (such as `context`, `database/sql`, `encoding/json`, `fmt`, `github.com/go-sql-driver/mysql`, `github.com/google/uuid`, `io`, `log`, `net/http`, `os`, `os/exec`, `path/filepath`) would be stored in the Code region.
 ### Part C: Storage and File Organization
 
-![[Storage.png]]
+![Storage.png](https://raw.githubusercontent.com/ldt9/Database-Webplatform-in-Go/main/Storage.png)
 `server.go` interacts with a MySQL database and serves files from a file system. It also executes Python scripts and serves images. The server uses a configuration file `config.json` to set up various parameters such as the root directory, the default file to serve, the server port, the buffer size, and the number of buffers. The server serves static HTML files from a directory specified in the configuration file. It also contains a directory `dist/` that holds compiled binary (.exe) files. 
 
 The server interacts with a MySQL database that contains tables `formoutput.users`, `formoutput.posts`, and `formoutput.bookmarks`. The server inserts data into these tables and queries data from them.

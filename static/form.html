@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <style>
+            .input-group {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+         <h1>CarEmails</h1>
+            <p>Send a Car Email</p>
+        <div>
+            <form method="POST" action="/form">
+                <div class="input-group">
+                    <label>State</label><input name="state" type="text" value=""/>
+                </div>
+                <div class="input-group">
+                    <label>License</label><input name="license" type="text" value=""/>
+                </div>
+                <div class="input-group">
+                    <label>Message</label><textarea name="message"></textarea>
+                </div>
+                <input type="submit" value="Submit"/>
+                <input type="reset" value="Reset"/>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 id="header">Multiply by 2</h1>
+<form id="multiplyForm" action="/multiply" method="post">
+    <input type="number" id="number" name="number" required>
+    <button type="submit">Multiply</button>
+</form>
+<p id="result"></p>
+    <script>
+
+        window.onload = function() {
+            var color = localStorage.getItem('color');
+            var fontSize = localStorage.getItem('fontSize');
+            var fontFamily = localStorage.getItem('fontFamily');
+            var header = document.getElementById('header');
+
+            if (color && fontSize && fontFamily) {
+                document.body.style.color = color;
+                header.style.color = color;
+                document.body.style.fontSize = fontSize + 'px';
+                header.style.fontSize = fontSize + 'px';
+                document.body.style.fontFamily = fontFamily;
+                header.style.fontFamily = fontFamily;
+            }
+
+            // Load the saved result from local storage when the page is loaded
+            var result = localStorage.getItem('result');
+            if (result) {
+                document.getElementById('result').textContent = result;
+            }
+        };
+
+        document.getElementById('multiplyForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var number = document.getElementById('number').value;
+            fetch('/multiply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'number=' + encodeURIComponent(number),
+            })
+                .then(response => response.text())
+                .then(result => {
+                    document.getElementById('result').textContent = result;
+                    localStorage.setItem('result', result);
+                });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+'@startuml
+''https://plantuml.com/deployment-diagram
+'
+'actor actor
+'actor/ "actor/"
+'agent agent
+'artifact artifact
+'boundary boundary
+'card card
+'circle circle
+'cloud cloud
+'collections collections
+'component component
+'control control
+'database database
+'entity entity
+'file file
+'folder folder
+'frame frame
+'interface interface
+'label label
+'node node
+'package package
+'queue queue
+'rectangle rectangle
+'stack stack
+'storage storage
+'usecase usecase
+'usecase/ "usecase/"
+'@enduml
+
+@startuml
+
+title Server Memory Layout
+
+package "Virtual Memory" {
+  [Stack]
+  [Heap]
+  [Static/Global]
+  [Code]
+}
+
+note bottom of [Stack]
+  Local variables
+  Function parameters
+  Return addresses
+end note
+
+note bottom of [Heap]
+  Dynamically allocated memory
+  - config (Config)
+  - db (*sql.DB)
+  - fileServer (CustomFileServer)
+  - pool (*WorkerPool)
+  - server (*http.Server)
+end note
+
+note bottom of [Static/Global]
+  Global variables
+  - config (Config)
+  - db (*sql.DB)
+end note
+
+note bottom of [Code]
+  Binary code of the program
+  - main package
+  - imported packages
+    - context
+    - database/sql
+    - encoding/json
+    - fmt
+    - github.com/go-sql-driver/mysql
+    - github.com/google/uuid
+    - io
+    - log
+    - net/http
+    - os
+    - os/exec
+    - path/filepath
+end note
+
+@enduml

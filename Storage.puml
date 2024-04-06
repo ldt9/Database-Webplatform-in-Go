@@ -1,0 +1,48 @@
+@startuml
+
+title Server Project Storage and File Organization
+
+cloud "File System" {
+  [config.json]
+  [images.jpg]
+  [multiply.py]
+  [server.go]
+  [static/]
+  [dist/]
+}
+
+note bottom of [dist/]
+    Directory containing compiled binary (.exe) files
+end note
+
+note bottom of [static/]
+    Directory containing static html files
+end note
+
+note bottom of [config.json]
+  Configuration file for the server
+end note
+
+note bottom of [images.jpg]
+  Image file served by the server
+end note
+
+note bottom of [multiply.py]
+  Python script executed by the server
+end note
+
+note bottom of [server.go]
+  Main server application code
+end note
+
+database "MySQL Database" {
+  [formoutput.users]
+  [formoutput.posts]
+  [formoutput.bookmarks]
+}
+
+note bottom of "MySQL Database"
+  Database table used to store form data
+end note
+
+@enduml

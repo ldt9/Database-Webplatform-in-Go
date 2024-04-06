@@ -1,0 +1,120 @@
+@startuml
+
+class Config {
+    - RootDirectory: string
+    - NotFoundFile: string
+    - ServerPort: string
+    - DefaultFile: string
+    - BufferCount: int
+    - BufferSize: int
+    - ThreadPoolSize: int
+}
+
+class CustomFileServer {
+    - root: http.FileSystem
+    - BufferSize: int
+    + ServeHTTP(w http.ResponseWriter, r *http.Request)
+}
+
+class WorkerPool {
+    - MaxWorkers: int
+    - workerQueue: chan struct{}
+    + NewWorkerPool(maxWorkers int): WorkerPool
+    + ServeHTTPWithContext(ctx context.Context, w http.ResponseWriter, r *http.Request, handler http.Handler)
+}
+
+class sql.DB
+
+class http.Handler {
+    + ServeHTTP(w http.ResponseWriter, r *http.Request)
+}
+
+class http.Server {
+    - Addr: string
+    - Handler: http.Handler
+    + ListenAndServe()
+    + Shutdown(ctx context.Context)
+}
+
+Config --* CustomFileServer
+Config --* WorkerPool
+WorkerPool --* http.Handler
+http.Handler <|-- http.ServeMux
+http.Handler <|-- CustomFileServer
+CustomFileServer --* http.ResponseWriter
+CustomFileServer --* http.Request
+WorkerPool *-- context.Context
+WorkerPool *-- http.ResponseWriter
+WorkerPool *-- http.Request
+WorkerPool *-- http.Handler
+http.ServeMux --* http.ResponseWriter
+http.ServeMux --* http.Request
+http.ServeMux --* http.Handler
+http.ServeMux --* WorkerPool
+WorkerPool -- sql.DB
+sql.DB --|> sql.DB
+
+note left of Config::RootDirectory
+Root directory to serve files from (./static)
+end note
+
+note left of Config::NotFoundFile
+File to serve when the requested file is not found (404.html)
+end note
+
+note left of Config::ServerPort
+Default port to serve (8080)
+end note
+
+note left of Config::DefaultFile
+Default file to serve (index.html)
+end note
+
+note left of Config::BufferCount
+Number of buffers
+end note
+
+note left of Config::BufferSize
+Custom buffer size
+end note
+
+note left of Config::ThreadPoolSize
+Number of workers in the pool
+end note
+
+note left of WorkerPool::NewWorkerPool
+Creates a new worker pool with the given number of workers
+end note
+
+note left of WorkerPool::ServeHTTPWithContext
+Serves HTTP requests within the given context
+end note
+
+note right of Server::Addr
+Address to listen on
+end note
+
+note right of Server::Handler
+Handler to invoke
+end note
+
+note right of Server::ListenAndServe
+Starts the server
+end note
+
+note right of Server::Shutdown
+Stops the server
+end note
+
+class MainRoutine {
+    - err: error
+}
+
+'MainRoutine *-- context.Background()
+MainRoutine *-- http.ServeMux
+MainRoutine *-- WorkerPool::ServeHTTPWithContext
+MainRoutine *-- http.Handler::ServeHTTP
+MainRoutine *-- http.Server::ListenAndServe()
+MainRoutine *-- http.Server::Shutdown()
+
+@enduml

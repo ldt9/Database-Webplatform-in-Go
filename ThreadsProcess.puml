@@ -1,0 +1,53 @@
+@startuml
+
+participant "Main" as M
+participant "Database" as DB
+participant "WorkerPool" as WP
+participant "Server" as S
+participant "HTTP Request" as HR
+participant "HTTP Response" as HRes
+participant "Error Handler" as EH
+
+M -> DB: Open Connection
+activate DB
+DB --> M: Connection Successful
+deactivate DB
+
+M -> WP: Initialize WorkerPool
+activate WP
+WP --> M: WorkerPool Initialized
+deactivate WP
+
+M -> S: Start Server with WorkerPool
+activate S
+S --> M: Server Started
+deactivate S
+
+HR -> S: Request Page
+activate S
+alt Successful Request
+    S -> WP: Delegate Request to WorkerPool
+    activate WP
+    WP --> S: Serve Page
+    deactivate WP
+    S --> HR: Return Response
+else Failed Request
+    S -> EH: Handle Error
+    activate EH
+    EH --> S: Error Handled
+    deactivate EH
+    S --> HR: Return Error Response
+end
+deactivate S
+
+M -> M: Wait for context to be canceled
+activate M
+M --> M: Context Canceled
+deactivate M
+
+M -> S: Shutdown Server
+activate S
+S --> M: Server Shutdown
+deactivate S
+
+@enduml

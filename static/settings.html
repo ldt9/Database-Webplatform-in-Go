@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+</head>
+<body>
+<h1>Settings</h1>
+<form id="settingsForm">
+    <label for="color">Color:</label>
+    <input type="color" id="color" name="color">
+    <label for="fontSize">Font size:</label>
+    <input type="number" id="fontSize" name="fontSize">
+    <label for="fontFamily">Font style:</label>
+    <select id="fontFamily" name="fontFamily">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <!-- Add more font options as needed -->
+    </select>
+    <button type="submit">Save</button>
+</form>
+
+<script>
+    document.getElementById('settingsForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var color = document.getElementById('color').value;
+        var fontSize = document.getElementById('fontSize').value;
+        var fontFamily = document.getElementById('fontFamily').value;
+
+        // Save the settings in local storage
+        localStorage.setItem('color', color);
+        localStorage.setItem('fontSize', fontSize);
+        localStorage.setItem('fontFamily', fontFamily);
+    });
+
+    // Load the saved settings from local storage when the page is loaded
+    window.onload = function() {
+        var color = localStorage.getItem('color');
+        var fontSize = localStorage.getItem('fontSize');
+        var fontFamily = localStorage.getItem('fontFamily');
+
+        if (color) {
+            document.getElementById('color').value = color;
+        }
+        if (fontSize) {
+            document.getElementById('fontSize').value = fontSize;
+        }
+        if (fontFamily) {
+            document.getElementById('fontFamily').value = fontFamily;
+        }
+    };
+</script>
+</body>
+</html>
